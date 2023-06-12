@@ -13,6 +13,7 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
+
 def get_sales_data():
     """
     Get sales figures input from the user.
@@ -25,13 +26,12 @@ def get_sales_data():
         data_str = input("Enter your data here: ")
         
         sales_data = data_str.split(",")
-        
-
         if validate_data(sales_data):
             print("Data is valid!")
             break
 
     return sales_data
+
 
 def validate_data(values):
     """
@@ -50,6 +50,7 @@ def validate_data(values):
         return False
     return True
 
+
 def update_sales_worksheet(data):
     """
     update sales worksheet, add new row with the list data provide.
@@ -58,6 +59,17 @@ def update_sales_worksheet(data):
     sales_worksheet = SHEET.worksheet("sales")
     sales_worksheet.append_row(data)
     print("sales works updated succesfully.\n")
+
+
+def update_surplus_worksheet(data):
+    """
+    update surplus worksheet, add new row with the list data provide.
+    """
+    print("updating sales worksheet...\n")
+    surplus_worksheet = SHEET.worksheet("surplus")
+    surplus_worksheet.append_row(data)
+    print("surplus works updated succesfully.\n")
+
 
 def calculate_surplus_data(sales_row):
     """
@@ -75,7 +87,6 @@ def calculate_surplus_data(sales_row):
     return surplus_data
 
 
-
 def main():
     """
     Run all program function
@@ -84,7 +95,7 @@ def main():
     sales_data = [int(num) for num in data]
     update_sales_worksheet(sales_data)
     new_surplus_data = calculate_surplus_data(sales_data)
-    print(new_surplus_data)
+    update_surplus_worksheet(new_surplus_data)
 
 
 print("Welcome to love sandwiches Data Automation")
